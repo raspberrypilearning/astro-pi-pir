@@ -1,59 +1,50 @@
-## Introduction
+## Using the Flight Unit PIR
 
-Add project description here. What will learners be making? Broadly what skills will they be learning?
+The PIR (Passive Infrared) motion sensors on the Flight Units aboard the ISS are connected as shown in the diagram below.
 
-### What you will make
+![A PIR connected to a Raspberry Pi computer, with the output pin of the PIR connected to GPIO 12](images/RPI_PIR.png)
 
---- no-print ---
-Add instructions for interacting with the embedded content here.
+You can look at all the available methods for the `MotionSensor` class in the [gpiozero documentation](https://gpiozero.readthedocs.io/en/stable/api_input.html#motionsensor-d-sun-pir)
 
-<div class="scratch-preview">
-  <iframe allowtransparency="true" width="485" height="402" src="https://scratch.mit.edu/projects/embed/160619869/?autostart=false" frameborder="0"></iframe>
-</div>
---- /no-print ---
+There are two main ways to detect motion.
 
---- print-only ---
-![Complete project](images/showcase_static.png)
---- /print-only ---
+The first will pause your program until motion is detected, and then continue. An example is shown below.
 
---- collapse ---
+--- code ---
 ---
-title: What you will need
+language: python
+filename: main.py
+line_numbers: true
+line_number_start: 
+highlight_lines: 
 ---
-### Hardware
+from gpiozero import MotionSensor
 
-+ A computer or tablet capable of running Scratch 3
+pir = MotionSensor(12)
 
-### Software
+pir.wait_for_motion()
 
-+ Scratch 3 (either [online](https://scratch.mit.edu/){:target="_blank"} or [offline](https://scratch.mit.edu/download){:target="_blank"})
-+ Python 3
-+ This project can be completed in a web browser using [trinket.io](https://trinket.io/)
+print('Motion detected')
+--- /code ---
 
-### Downloads
+The second will run a function you have written, each time that motion is detected. An example is shown below.
 
-+ Download the project [starter file](https://rpf.io/p/en/projectName-go){:target="_blank"} if working offline
-
---- /collapse ---
-
---- collapse ---
+--- code ---
 ---
-title: What you will learn
+language: python
+filename: main.py
+line_numbers: true
+line_number_start: 
+highlight_lines: 
 ---
+from gpiozero import MotionSensor
 
-+ Learning objective 1
-+ Learning objective 2
-+ Learning objective 3
+pir = MotionSensor(12)
 
---- /collapse ---
+def motion_detected():
+    print('Motion detected')
 
---- collapse ---
----
-title: Additional information for educators
----
+pir.when_motion = motion_detected
+--- /code ---
 
-You can download the completed project [here](https://rpf.io/p/en/projectName-get){:target="_blank"}.
-
-If you need to print this project, please use the [printer-friendly version](https://projects.raspberrypi.org/en/projects/projectName/print){:target="_blank"}.
-
---- /collapse ---
+**Note - The PIR motion sensor takes a few seconds in between detecting motion, before it can be triggered again.**
